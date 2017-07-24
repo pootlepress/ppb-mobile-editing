@@ -1,24 +1,24 @@
 <?php
 /**
- * Pootle Page Builder Addon Boilerplate Admin class
+ * PPB Mobile Editing Admin class
  * @property string token Plugin token
  * @property string $url Plugin root dir url
  * @property string $path Plugin root dir path
  * @property string $version Plugin version
  */
-class Pootle_Page_Builder_Addon_Boilerplate_Admin{
+class PPB_Mobile_Editing_Admin{
 
 	/**
-	 * @var 	Pootle_Page_Builder_Addon_Boilerplate_Admin Instance
+	 * @var 	PPB_Mobile_Editing_Admin Instance
 	 * @access  private
 	 * @since 	1.0.0
 	 */
 	private static $_instance = null;
 
 	/**
-	 * Main Pootle Page Builder Addon Boilerplate Instance
+	 * Main PPB Mobile Editing Instance
 	 * Ensures only one instance of Storefront_Extension_Boilerplate is loaded or can be loaded.
-	 * @return Pootle_Page_Builder_Addon_Boilerplate instance
+	 * @return PPB_Mobile_Editing_Admin instance
 	 * @since 	1.0.0
 	 */
 	public static function instance() {
@@ -26,6 +26,7 @@ class Pootle_Page_Builder_Addon_Boilerplate_Admin{
 			self::$_instance = new self();
 		}
 		return self::$_instance;
+
 	} // End instance()
 
 	/**
@@ -34,80 +35,69 @@ class Pootle_Page_Builder_Addon_Boilerplate_Admin{
 	 * @since 	1.0.0
 	 */
 	private function __construct() {
-		$this->token   =   Pootle_Page_Builder_Addon_Boilerplate::$token;
-		$this->url     =   Pootle_Page_Builder_Addon_Boilerplate::$url;
-		$this->path    =   Pootle_Page_Builder_Addon_Boilerplate::$path;
-		$this->version =   Pootle_Page_Builder_Addon_Boilerplate::$version;
+		$this->token   =   PPB_Mobile_Editing::$token;
+		$this->url     =   PPB_Mobile_Editing::$url;
+		$this->path    =   PPB_Mobile_Editing::$path;
+		$this->version =   PPB_Mobile_Editing::$version;
+
+		$this->hooks();
 	} // End __construct()
 
-	/**
-	 * Adds row settings panel tab
-	 * @param array $tabs The array of tabs
-	 * @return array Tabs
-	 * @filter pootlepb_row_settings_tabs
-	 * @since 	1.0.0
-	 */
-	public function row_settings_tabs( $tabs ) {
-		$tabs[ $this->token ] = array(
-			'label' => 'Sample Tab',
-			'priority' => 5,
-		);
-		return $tabs;
+	private function hooks() {
+		add_action( 'wp_ajax_nopriv_ppb_app_user', array( $this, 'app_user_status' ) );
+		add_action( 'wp_ajax_ppb_app_user', array( $this, 'app_user_logged_in' ) );
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
-	/**
-	 * Adds row settings panel fields
-	 * @param array $fields Fields to output in row settings panel
-	 * @return array Tabs
-	 * @filter pootlepb_row_settings_fields
-	 * @since 	1.0.0
-	 */
-	public function row_settings_fields( $fields ) {
-		$fields[ $this->token . '_sample_color' ] = array(
-			'name' => 'Sample color',
-			'type' => 'color',
-			'priority' => 1,
-			'tab' => $this->token,
-			'help-text' => 'This is a sample boilerplate field, Sets 12px outline color.'
-		);
-		return $fields;
+	//region User login workflow
+	public function app_user_status() {
+		setcookie( 'ppb-redirect', filter_input( INPUT_GET, 'redirect' ) );
+		header( 'Location: ' . site_url( '/wp-login.php' ) . '?redirect_to=' . admin_url( 'admin-ajax.php?action=ppb_app_user' ) );
+		exit();
 	}
 
-	/**
-	 * Adds editor panel tab
-	 * @param array $tabs The array of tabs
-	 * @return array Tabs
-	 * @filter pootlepb_content_block_tabs
-	 * @since 	1.0.0
-	 */
-	public function content_block_tabs( $tabs ) {
-		$tabs[ $this->token ] = array(
-			'label' => 'Sample Tab',
-			'priority' => 5,
-		);
-		return $tabs;
+	public function app_user_logged_in() {
+		$nonce = wp_create_nonce( 'ppb-mobile-editing' );
+		$redirect = filter_input( INPUT_GET, 'redirect' );
+		if ( isset( $_COOKIE['ppb-redirect'] ) ) {
+			$redirect = $_COOKIE['ppb-redirect'];
+		}
+
+		header( "Location: $redirect?nonce=$nonce" );
+	}
+	//endregion
+
+	//region REST API routes
+
+	function register_routes() {
+		register_rest_route( 'ppb/v1', '/pages', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'get_pages' ),
+		) );
 	}
 
-	/**
-	 * Adds content block panel fields
-	 * @param array $fields Fields to output in content block panel
-	 * @return array Tabs
-	 * @filter pootlepb_content_block_fields
-	 * @since 	1.0.0
-	 */
-	public function content_block_fields( $fields ) {
-		$fields[ $this->token . '_sample_number' ] = array(
-			'name' => 'Sample Number with unit',
-			'type' => 'number',
-			'priority' => 1,
-			'min'  => '0',
-			'max'  => '100',
-			'step' => '1',
-			'unit' => 'em',
-			'tab' => $this->token,
-			'help-text' => 'This is a sample boilerplate field, Sets left and top offset in em.'
+	function get_pages() {
+		global $Pootle_Page_Builder;
+
+		$query = $Pootle_Page_Builder->ppb_posts();
+
+		$json  = array(
+			'site_url' => site_url(),
+			'posts'    => array(),
+			'nonce' => wp_create_nonce( 'ppb-ipad-live-edit' ),
 		);
-		return $fields;
+
+		foreach ( $query->posts as $post ) {
+			$json['posts'][] = array(
+				'title'  => $post->post_title,
+				'link'   => get_permalink( $post ),
+				'type'   => $post->post_type,
+				'status' => $post->post_status,
+			);
+		}
+		return $json;
 	}
+
+	//endregion
 
 }

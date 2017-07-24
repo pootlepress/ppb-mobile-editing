@@ -1,6 +1,2 @@
-/**
- * Plugin front end styles
- *
- * @package Pootle_Page_Builder_Addon_Boilerplate
- * @version 1.0.0
- */
+.pme-panel{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);position:fixed;top:0;left:0;z-index:9999}.pme-panel .action{box-sizing:border-box;text-align:center;width:100px;height:100px;margin:0.5em;border-radius:999px;border:1px solid rgba(255,255,255,0.5);color:#fff}.pme-panel .action i{font-size:40px;line-height:100px}.pme-panel .action h4{margin-top:16px;font:300 14px sans-serif;text-transform:capitalize;color:#fff;position:relative}
+/*# sourceMappingURL=front-end.css.map */

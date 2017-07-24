@@ -1,16 +1,31 @@
 <?php
+/*
+Plugin Name: PPB Mobile Editing
+Plugin URI: http://pootlepress.com/
+Description: Boilerplate for fast track Pootle Page Builder Addon Development
+Author: Shramee
+Version: 1.0.0
+Author URI: http://shramee.com/
+@developer shramee <shramee.srivastav@gmail.com>
+*/
+
+/** Plugin admin class */
+require 'inc/class-admin.php';
+/** Plugin public class */
+require 'inc/class-public.php';
+
 /**
- * Pootle Page Builder Addon Boilerplate main class
+ * PPB Mobile Editing main class
  * @static string $token Plugin token
  * @static string $file Plugin __FILE__
  * @static string $url Plugin root dir url
  * @static string $path Plugin root dir path
  * @static string $version Plugin version
  */
-class Pootle_Page_Builder_Addon_Boilerplate{
+class PPB_Mobile_Editing{
 
 	/**
-	 * @var 	Pootle_Page_Builder_Addon_Boilerplate Instance
+	 * @var 	PPB_Mobile_Editing Instance
 	 * @access  private
 	 * @since 	1.0.0
 	 */
@@ -52,26 +67,26 @@ class Pootle_Page_Builder_Addon_Boilerplate{
 	public static $path;
 
 	/**
-	 * @var 	Pootle_Page_Builder_Addon_Boilerplate_Admin Instance
+	 * @var 	PPB_Mobile_Editing_Admin Instance
 	 * @access  public
 	 * @since 	1.0.0
 	 */
 	public $admin;
 
 	/**
-	 * @var 	Pootle_Page_Builder_Addon_Boilerplate_Public Instance
+	 * @var 	PPB_Mobile_Editing_Public Instance
 	 * @access  public
 	 * @since 	1.0.0
 	 */
 	public $public;
 
 	/**
-	 * Main Pootle Page Builder Addon Boilerplate Instance
+	 * Main PPB Mobile Editing Instance
 	 *
 	 * Ensures only one instance of Storefront_Extension_Boilerplate is loaded or can be loaded.
 	 *
 	 * @since 1.0.0
-	 * @return Pootle_Page_Builder_Addon_Boilerplate instance
+	 * @return PPB_Mobile_Editing instance
 	 */
 	public static function instance( $file ) {
 		if ( null == self::$_instance ) {
@@ -88,7 +103,7 @@ class Pootle_Page_Builder_Addon_Boilerplate{
 	 */
 	private function __construct( $file ) {
 
-		self::$token   =   'ppb-addon-boilerplate';
+		self::$token   =   'ppb-mobile-editing';
 		self::$file    =   $file;
 		self::$url     =   plugin_dir_url( $file );
 		self::$path    =   plugin_dir_path( $file );
@@ -124,16 +139,7 @@ class Pootle_Page_Builder_Addon_Boilerplate{
 	 */
 	private function _admin() {
 		//Instantiating admin class
-		$this->admin = Pootle_Page_Builder_Addon_Boilerplate_Admin::instance();
-
-		//Row settings panel tabs
-		add_filter( 'pootlepb_row_settings_tabs',		array( $this->admin, 'row_settings_tabs' ) );
-		//Row settings panel fields
-		add_filter( 'pootlepb_row_settings_fields',		array( $this->admin, 'row_settings_fields' ) );
-		//Content block panel tabs
-		add_filter( 'pootlepb_content_block_tabs',		array( $this->admin, 'content_block_tabs' ) );
-		//Content block panel fields
-		add_filter( 'pootlepb_content_block_fields',	array( $this->admin, 'content_block_fields' ) );
+		$this->admin = PPB_Mobile_Editing_Admin::instance();
 
 	}
 
@@ -143,15 +149,7 @@ class Pootle_Page_Builder_Addon_Boilerplate{
 	 */
 	private function _public() {
 		//Instantiating public class
-		$this->public = Pootle_Page_Builder_Addon_Boilerplate_Public::instance();
-
-		//Adding front end JS and CSS in /assets folder
-		add_action( 'wp_enqueue_scripts',					array( $this->public, 'enqueue' ) );
-		//Add/Modify row html attributes
-		add_filter( 'pootlepb_row_style_attributes',		array( $this->public, 'row_attr' ), 10, 2 );
-		//Add/Modify content block html attributes
-		add_filter( 'pootlepb_content_block_attributes',	array( $this->public, 'content_block_attr' ), 10, 2 );
-
+		$this->public = PPB_Mobile_Editing_Public::instance();
 	} // End enqueue()
 
 	/**
@@ -168,3 +166,7 @@ class Pootle_Page_Builder_Addon_Boilerplate{
 		return $active;
 	}
 }
+
+/** Intantiating main plugin class */
+PPB_Mobile_Editing::instance( __FILE__ );
+

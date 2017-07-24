@@ -1,11 +1,12 @@
 /**
  * Plugin front end scripts
  *
- * @package Pootle_Page_Builder_Addon_Boilerplate
+ * @package PPB_Mobile_Editing
  * @version 1.0.0
  */
 jQuery(function ($) {
+	var $body = $( 'body' );
+	$body.on( 'dblclick', '.ppb-row', function(){
 
-    //Put all jquery code in here
-
+	} )
 });

@@ -1,12 +1,12 @@
-# pootle page builder addon boilerplate
+# PPB Mobile Editing
 A structured, object oriented foundation to help you quickly navigate your way to making awesome pootle page builder add ons.
 
 ## Contents
 
 Page builder add on boilerplate is structured as mentioned below:
 
-* `ppb-addon-boilerplate.php` To tell WordPress that you got a plugin here, Fetches the required files and instantiates main plugin class
-* `class-ppb-addon-boilerplate.php` Your main plugin class, adds admin and public hooks and initiates admin and public classes
+* `ppb-mobile-editing.php` To tell WordPress that you got a plugin here, Fetches the required files and instantiates main plugin class
+* `class-ppb-mobile-editing.php` Your main plugin class, adds admin and public hooks and initiates admin and public classes
 * `README.md` The file that you’re currently reading.
 * `assets` Contains client side scripts and styles
   * `front-end.js` jQuery script enqueued on front end
@@ -38,15 +38,15 @@ The WordPress Plugin Boilerplate is licensed under the GPL v2 or later.
 
 ## Just these two things to get started quickly
 
-1. Change `ppb-addon-boilerplate.php` and `class-ppb-addon-boilerplate.php` to something like `your-awesome-addon.php` and `class-your-awesome-addon.php`
+1. Change `ppb-mobile-editing.php` and `class-ppb-mobile-editing.php` to something like `your-awesome-addon.php` and `class-your-awesome-addon.php`
 2. Do following search and replace through your entire project
 
 Search For | Replace With
 -----------|-------------
-Pootle_Page_Builder_Addon_Boilerplate | Your_Awesome_Addon
-Pootle Page Builder Addon Boilerplate | Your Awesome Addon
-class-ppb-addon-boilerplate.php | class-your-awesome-addon.php
-ppb-addon-boilerplate | ppb-your-awesome-addon
+PPB_Mobile_Editing | Your_Awesome_Addon
+PPB Mobile Editing | Your Awesome Addon
+class-ppb-mobile-editing.php | class-your-awesome-addon.php
+ppb-mobile-editing | ppb-your-awesome-addon
 
 ##Documentation
 
