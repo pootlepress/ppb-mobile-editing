@@ -9,6 +9,18 @@
  */
 class PPB_Mobile_Editing_Public{
 
+	//region Properties
+
+	/** @var int Number of rows */
+	private $rowCount = 0;
+
+	/** @var int Number of rows */
+	private $contentCount = 0;
+
+	//endregion
+
+	//region Instantiation
+
 	/**
 	 * @var 	PPB_Mobile_Editing_Public Instance
 	 * @access  private
@@ -43,19 +55,63 @@ class PPB_Mobile_Editing_Public{
 		add_action( 'wp', array( $this, 'init' ) );
 	} // End __construct()
 
+	//endregion
+
+	/**
+	 * Verifies nonce and initiates mobile editor on success
+	 * @since 1.0.0
+	 */
 	function init() {
 		$nonce = filter_input( INPUT_GET, 'ppb-mobile-editing' );
 
-		if ( $nonce && wp_verify_nonce( $nonce, 'ppb-mobile-editing' ) ) {
-			var_dump( $nonce );
-			$this->hooks();
+		if ( $nonce ) {
+			if ( wp_verify_nonce( $nonce, 'ppb-mobile-editing' ) ) {
+				show_admin_bar( false );
+				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
+				add_action( 'wp_footer', array( $this, 'footer' ) );
+				add_filter( 'pootlepb_row_style_attributes',		array( $this, 'row_attr' ), 10, 2 );
+				add_filter( 'pootlepb_content_block_attributes',	array( $this, 'content_attr' ), 10, 2 );
+				add_filter( 'pootlepb_after_pb',	array( $this, 'after_pb' ), 10, 2 );
+			} else {
+				echo '<h2>Nonce Validation failed for mobile editing</h2>' . wp_create_nonce( 'ppb-mobile-editing' );
+			}
 		}
 	}
 
-	private function hooks() {
-		//Adding front end JS and CSS in /assets folder
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
-		add_action( 'wp_footer', array( $this, 'footer' ) );
+	/**
+	 * Adds or modifies the row attributes
+	 * @param array $attr Row html attributes
+	 * @param array $settings Row settings
+	 * @return array Row html attributes
+	 * @filter pootlepb_row_style_attributes
+	 * @since 1.0.0
+	 */
+	public function row_attr( $attr ) {
+			$attr['data-index'] = $this->rowCount++;
+
+		return $attr;
+	}
+
+	/**
+	 * Adds or modifies the row attributes
+	 * @param array $attr Row html attributes
+	 * @param array $settings Row settings
+	 * @return array Row html attributes
+	 * @filter pootlepb_row_style_attributes
+	 * @since 1.0.0
+	 */
+	public function content_attr( $attr ) {
+		$attr['data-index'] = $this->contentCount++;
+
+		return $attr;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function after_pb() {
+		$this->rowCount = 0;
+		$this->contentCount = 0;
 	}
 
 	/**

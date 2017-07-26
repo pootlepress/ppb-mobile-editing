@@ -1,0 +1,48 @@
+.ppb-block, .ppb-row {
+	outline: 0 solid rgba( 0,0,0,0.25 );
+	border: 1px solid rgba(0,0,0,0);
+	transition: all 0.5s 0.25s;
+}
+
+.pme-editing {
+	outline: 9999px solid rgba( 0,0,0,0.25 );
+	border: 1px solid #ef4832;
+}
+
+.pme-toolbar {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	margin-left: -50vw;
+	width: 100vw;
+	z-index: 9999;
+	text-align: center;
+	background: rgb(239, 72, 50);
+	color: #fff;
+	justify-content: space-around;
+	&.pme-toolbar-bottom {
+		top: auto;
+		bottom: 0;
+	}
+	*, .fa {
+		line-height: 30px;
+		color: inherit;
+	}
+	> * {
+		margin: 5px;
+		padding: 5px 11px;
+	}
+	.fa {
+		font-size: 25px;
+		width: 40px;
+	}
+}
+
+#pme-content-element {
+	-webkit-appearance: none;
+	background: none;
+	border: 1px solid;
+	line-height: 28px;
+	width: 160px;
+	margin-right: auto;
+}

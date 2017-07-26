@@ -1,0 +1,47 @@
+.pme-panel {
+	height: 100vh;
+	width: 200vw;
+	background: rgba(0, 0, 0, 0.7);
+	position: fixed;
+	top: 0;
+	left: -50vw;
+	z-index: 9999;
+	.actions {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		flex-wrap: wrap;
+		max-width: 300px;
+	}
+	&.active {
+		left: 0;
+		width: 100vw;
+		.action {
+			//margin: 1em 1em 4em;
+		}
+	}
+	.action {
+		box-sizing: border-box;
+		text-align: center;
+		width: 100px;
+		height: 100px;
+		margin: 16px 16px 48px;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.5);
+		color: #fff;
+		position: relative;
+		transition: all 0.5s;
+		i {
+			font-size: 40px;
+			line-height: 100px;
+		}
+
+		div {
+			margin-top: 16px;
+			font: 300 14px/16px sans-serif;
+			text-transform: capitalize;
+			color: #fff;
+			position: relative;
+		}
+	}
+}

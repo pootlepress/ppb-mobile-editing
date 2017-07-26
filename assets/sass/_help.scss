@@ -1,0 +1,52 @@
+#pme-help {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	background: #ef4832;
+	width: 40px;
+	padding-left: 11px;
+	padding-top: 11px;
+	border-radius: 999px 0 0;
+	height: 40px;
+	text-align: center;
+	color: #fff;
+	transition: all 0.5s;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
+	z-index: 9999;
+
+	.fa-close {
+		display: none;
+		padding: 0 0 1em 1em;
+	}
+
+	* {
+		color: inherit;
+		font-size: 20px;
+		line-height: 35px;
+		margin: 0;
+	}
+
+	p {
+		font: 0/1.6 sans-serif;
+		transition: all 0.5s;
+	}
+
+	&.active {
+		width: 250px;
+		height: 250px;
+		padding: 50px 10px 10px 70px;
+		i:first-child {
+			display: none;
+		}
+
+		p {
+			font-size: 18px;
+		}
+		*:not(:first-child) {
+			display: block;
+		}
+	}
+}
