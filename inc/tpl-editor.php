@@ -25,15 +25,24 @@
 </div>
 
 <div id="pme-content-format" class="flex pme-toolbar" style="display:none;">
-	<a href="javascript:pmeContent('left')" class="fa fa-align-left"></a>
-	<a href="javascript:pmeContent('center')" class="fa fa-align-center"></a>
-	<a href="javascript:pmeContent('right')" class="fa fa-align-right"></a>
-<!--	<a href="javascript:pmeContent('justify')" class="fa fa-align-justify"></a>-->
-	<a href="javascript:pmeContent('bold')" class="fa fa-bold"></a>
-	<a href="javascript:pmeContent('italic')" class="fa fa-italic"></a>
-</div>
+	<a href="javascript:void(0)" class="fa fa-font pme-dropdown-toggle">
+		<span class="pme-dropdown" style="display:none;">
+			<i onclick="pmeContent('bold')" class="fa fa-bold"></i>
+			<i onclick="pmeContent('italic')" class="fa fa-italic"></i>
+			<i onclick="pmeContent('underline')" class="fa fa-underline"></i>
+		</span>
+	</a>
 
-<div id="pme-content-actions" class="flex pme-toolbar pme-toolbar-bottom" style="display:none;">
+	<a href="javascript:void(0)" class="fa fa-align-left pme-dropdown-toggle">
+		<span class="pme-dropdown" style="display:none;">
+			<i onclick="pmeContent('justifyLeft')" class="fa fa-align-left"></i>
+			<i onclick="pmeContent('justifyCenter')" class="fa fa-align-center"></i>
+			<i onclick="pmeContent('justifyRight')" class="fa fa-align-right"></i>
+		</span>
+	</a>
+
+	<a href="javascript:pmeContent('createLink')" class="fa fa-link"></a>
+
 	<select onchange="pmeContent('element', this.value)" id="pme-content-element">
 		<option value="">Text style</option>
 		<option value="h1">Title</option>

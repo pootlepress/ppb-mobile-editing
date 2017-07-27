@@ -46,26 +46,17 @@ jQuery( function ( $ ) {
 			},
 		},
 		contentActions = {
-			left: function () {
-				document.execCommand( 'justifyLeft' );
-			},
-			center: function () {
-				document.execCommand( 'justifyCenter' );
-			},
-			right: function () {
-				document.execCommand( 'justifyRight' );
-			},
-			bold: function () {
-				document.execCommand( 'bold' );
-			},
-			italic: function () {
-				document.execCommand( 'italic' );
+			createLink: function () {
+				var link = prompt( 'Where should we link to?', '' );
+				if ( link ) {
+					document.execCommand( 'createLink', false, link );
+				}
 			},
 			element: function ( tagName ) {
 				var
 					sel = document.getSelection(),
 					$el = $( sel.anchorNode.parentElement );
-				if ( $el.css('display') != 'block' ) {
+				if ( $el.css( 'display' ) != 'block' ) {
 					$el = $el.parentsUntil( '.ppb-block' ).filter( function () {
 						return $( this ).css( "display" ) === "block";
 					} ).first();
@@ -81,6 +72,9 @@ jQuery( function ( $ ) {
 				doneEditing();
 			},
 		};
+	$body.on( 'click', '.pme-dropdown-toggle', function ( e ) {
+		$( this ).find( '.pme-dropdown' ).slideToggle();
+	} );
 	$body.on( 'click', '.ppb-row[data-index]', function ( e ) {
 		var $t = $( e.target );
 		if ( justClicked ) {
@@ -107,6 +101,8 @@ jQuery( function ( $ ) {
 	pmeContent = function ( action, args ) {
 		if ( typeof contentActions[action] === 'function' ) {
 			contentActions[action]( args );
+		} else {
+			document.execCommand( action, false, args ? args : '' );
 		}
 	};
 

@@ -24,25 +24,47 @@
 		top: auto;
 		bottom: 0;
 	}
-	*, .fa {
-		line-height: 30px;
+	* {
 		color: inherit;
 	}
-	> * {
-		margin: 5px;
-		padding: 5px 11px;
+	input, select, .fa {
+		margin: 0 2px;
+	}
+	input, select {
+		margin: 2px;
+		line-height: 20px;
+		padding: 3px 5px;
+		border-radius: 0;
+		-webkit-appearance: none;
+		background: none;
+		border: 1px solid;
+		width: 32%;
 	}
 	.fa {
 		font-size: 25px;
-		width: 40px;
+		width: 32px;
+		line-height: 32px;
+		padding: 4px 0 1px;
 	}
 }
 
-#pme-content-element {
-	-webkit-appearance: none;
-	background: none;
-	border: 1px solid;
-	line-height: 28px;
-	width: 160px;
-	margin-right: auto;
+.pme-dropdown-toggle {
+	position: relative;
+	.fa {
+		display: block;
+		float: left;
+		width: calc( 33.3% - 4px );
+		padding: 0;
+	}
+	.pme-dropdown {
+		padding-top: 2px;
+		display: flex;
+		flex-direction: row;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		background: #d42;
+		border-top: 1px solid #c30;
+		width: 120px;
+	}
 }
