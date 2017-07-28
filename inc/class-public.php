@@ -17,6 +17,7 @@ class PPB_Mobile_Editing_Public{
 	/** @var int Number of rows */
 	private $contentCount = 0;
 
+	private $nonce;
 	//endregion
 
 	//region Instantiation
@@ -66,9 +67,12 @@ class PPB_Mobile_Editing_Public{
 
 		if ( $nonce ) {
 			if ( wp_verify_nonce( $nonce, 'ppb-mobile-editing' ) ) {
+				$this->nonce = $nonce;
 				show_admin_bar( false );
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
 				add_action( 'wp_footer', array( $this, 'footer' ) );
+
+				add_filter( 'pootlepb_content_block', array( $this, 'content' ), 5 );
 				add_filter( 'pootlepb_row_style_attributes',		array( $this, 'row_attr' ), 10, 2 );
 				add_filter( 'pootlepb_content_block_attributes',	array( $this, 'content_attr' ), 10, 2 );
 				add_filter( 'pootlepb_after_pb',	array( $this, 'after_pb' ), 10, 2 );
@@ -121,11 +125,41 @@ class PPB_Mobile_Editing_Public{
 	 */
 	public function enqueue() {
 
+		global $post;
+
 		$token = $this->token;
 		$url = $this->url;
 
 		wp_enqueue_style( $token . '-css', $url . '/assets/front-end.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/front-end.js', array( 'jquery' ) );
+
+		//Grid data
+		$panels_data = get_post_meta( $post->ID, 'panels_data', true );
+		if ( $panels_data && count( $panels_data ) > 0 ) {
+
+			wp_localize_script( $token . '-js', 'ppbData', $panels_data );
+
+			wp_localize_script( $token . '-js', 'ppbAjax', array(
+				'url'    => admin_url( 'admin-ajax.php' ),
+				'publish' => true,
+				'action' => 'pootlepb_live_editor',
+				'post'   => $post->ID,
+				'nonce'  => $this->nonce,
+			) );
+		}
+	}
+
+	/**
+	 * Wraps the content in .pootle-live-editor-realtime and convert short codes to strings
+	 *
+	 * @param string $content
+	 *
+	 * @return string Content
+	 */
+	public function content( $content ) {
+		$content = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $content );
+
+		return "<div class='pme-content'>$content</div>";
 	}
 
 	public function footer() {

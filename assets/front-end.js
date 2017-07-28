@@ -17,6 +17,12 @@ jQuery( function ( $ ) {
 		$acts = $( '#pme-actions' ),
 		$toolbars = $( '.pme-toolbar' ),
 		$contentToolbars = $toolbars.filter( '#pme-content-format, #pme-content-actions' ),
+		sync = function () {
+			return jQuery.post( ppbAjax.url, ppbAjax, function ( response ) {
+				doneEditing();
+				console.log( 'Saved page' );
+			} );
+		},
 		doneEditing = function () {
 			$toolbars.hide( 500 );
 			$( '.pme-editing' ).removeClass( 'pme-editing' );
@@ -66,10 +72,17 @@ jQuery( function ( $ ) {
 				}
 			},
 			save: function () {
-				doneEditing();
+				var save = confirm( 'Save all changes?' );
+				if ( save ) {
+					ppbData.widgets[pmeContentIndex].text = editing.blk.html();
+					sync();
+				}
 			},
 			discard: function () {
-				doneEditing();
+				var discard = confirm( 'Are you sure you want to discard all changes?' );
+				if ( discard ) {
+					doneEditing();
+				}
 			},
 		};
 	$body.on( 'click', '.pme-dropdown-toggle', function ( e ) {

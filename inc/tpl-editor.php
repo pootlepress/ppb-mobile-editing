@@ -25,6 +25,16 @@
 </div>
 
 <div id="pme-content-format" class="flex pme-toolbar" style="display:none;">
+	<select onchange="pmeContent('element', this.value)" id="pme-content-element">
+		<option value="">Text style</option>
+		<option value="h1">Title</option>
+		<option value="h2">Heading</option>
+		<option value="h3">Sub Heading</option>
+		<option value="h4">Small Heading</option>
+		<option value="p">Paragraph</option>
+		<option value="pre">Preformatted</option>
+		<option value="blockquote">Quote</option>
+	</select>
 	<a href="javascript:void(0)" class="fa fa-font pme-dropdown-toggle">
 		<span class="pme-dropdown" style="display:none;">
 			<i onclick="pmeContent('bold')" class="fa fa-bold"></i>
@@ -43,16 +53,10 @@
 
 	<a href="javascript:pmeContent('createLink')" class="fa fa-link"></a>
 
-	<select onchange="pmeContent('element', this.value)" id="pme-content-element">
-		<option value="">Text style</option>
-		<option value="h1">Title</option>
-		<option value="h2">Heading</option>
-		<option value="h3">Sub Heading</option>
-		<option value="h4">Small Heading</option>
-		<option value="p">Paragraph</option>
-		<option value="pre">Preformatted</option>
-		<option value="blockquote">Quote</option>
-	</select>
+	<span class="pme-separator"></span>
+
 	<a href="javascript:pmeContent('save')" class="fa fa-check"></a>
 	<a href="javascript:pmeContent('discard')" class="fa fa-close"></a>
+
+	<span></span>
 </div>

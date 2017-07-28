@@ -19,7 +19,7 @@
 	text-align: center;
 	background: rgb(239, 72, 50);
 	color: #fff;
-	justify-content: space-around;
+	justify-content: space-between;
 	&.pme-toolbar-bottom {
 		top: auto;
 		bottom: 0;
@@ -31,7 +31,7 @@
 		margin: 0 2px;
 	}
 	input, select {
-		margin: 2px;
+		margin: 4px;
 		line-height: 20px;
 		padding: 3px 5px;
 		border-radius: 0;
@@ -46,14 +46,17 @@
 		line-height: 32px;
 		padding: 4px 0 1px;
 	}
+	.pme-separator {
+		border-left: 1px solid rgba(255,255,255,0.5);
+		margin: 0 10px;
+		height: 25px;
+	}
 }
 
 .pme-dropdown-toggle {
 	position: relative;
 	.fa {
 		display: block;
-		float: left;
-		width: calc( 33.3% - 4px );
 		padding: 0;
 	}
 	.pme-dropdown {
@@ -62,9 +65,8 @@
 		flex-direction: row;
 		position: absolute;
 		top: 100%;
-		left: 0;
+		left: -2px;
 		background: #d42;
 		border-top: 1px solid #c30;
-		width: 120px;
 	}
 }
