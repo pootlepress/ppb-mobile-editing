@@ -74,6 +74,7 @@ jQuery( function ( $ ) {
 			save: function () {
 				var save = confirm( 'Save all changes?' );
 				if ( save ) {
+					ppbAjax.data = ppbData;
 					ppbData.widgets[pmeContentIndex].text = editing.blk.html();
 					sync();
 				}
