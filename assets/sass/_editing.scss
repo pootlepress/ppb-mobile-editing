@@ -70,3 +70,13 @@
 		border-top: 1px solid #c30;
 	}
 }
+
+a#row-background-image-preview {
+	.fa {
+		text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.7);
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25), -1px -1px 2px rgba(0, 0, 0, 0.25), -1px 1px 2px rgba(0, 0, 0, 0.25), -1px 1px 2px rgba(0, 0, 0, 0.25);
+	}
+	&:not([style*=url]) .fa {
+		opacity: 0;
+	}
+}

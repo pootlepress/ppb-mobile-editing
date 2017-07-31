@@ -3,6 +3,7 @@
 	<i class="fa fa-close"></i>
 	<p>Double tap page builder rows to edit.</p>
 </div>
+
 <div class="pme-panel flex" id="pme-actions" style="display: none;">
 	<div class="actions">
 		<a href="javascript:pmeAction('close')" class="action">
@@ -11,7 +12,7 @@
 		</a>
 		<a href="javascript:pmeAction('styleRow')" class="action">
 			<i class="fa fa-picture-o"></i>
-			<div>style row</div>
+			<div>row background</div>
 		</a>
 		<a href="javascript:pmeAction('editContent')" class="action">
 			<i class="fa fa-pencil-square-o"></i>
@@ -59,4 +60,25 @@
 	<a href="javascript:pmeContent('discard')" class="fa fa-close"></a>
 
 	<span></span>
+</div>
+
+<div class="pme-panel flex" id="pme-row" style="display: none;">
+	<div class="actions">
+		<a href="javascript:pmeRow('close')" class="action">
+			<i class="fa fa-close"></i>
+			<div>close</div>
+		</a>
+		<a href="javascript:pmeRow('bgColor')" class="action">
+			<i class="fa fa-paint-brush"></i>
+			<div>background color</div>
+		</a>
+		<a href="javascript:pmeRow('bgImage')" class="action">
+			<i class="fa fa-picture-o"></i>
+			<div>background image</div>
+		</a>
+		<a id="row-background-image-preview" href="javascript:pmeRow('clearImage')" class="action">
+			<i class="fa fa-trash-o "></i>
+			<div>background preview</div>
+		</a>
+	</div>
 </div>

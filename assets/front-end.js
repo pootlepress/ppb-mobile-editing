@@ -4,7 +4,7 @@
  * @package PPB_Mobile_Editing
  * @version 1.0.0
  */
-var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeContent;
+var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeContent;
 
 jQuery( function ( $ ) {
 	var justClicked,
@@ -15,6 +15,8 @@ jQuery( function ( $ ) {
 		},
 		$body = $( 'body' ),
 		$acts = $( '#pme-actions' ),
+		$rowBg = $( '#pme-row' ),
+		$rowBgPreview = $( '#row-background-image-preview' ),
 		$toolbars = $( '.pme-toolbar' ),
 		$contentToolbars = $toolbars.filter( '#pme-content-format, #pme-content-actions' ),
 		sync = function () {
@@ -39,7 +41,15 @@ jQuery( function ( $ ) {
 			},
 			styleRow: function () {
 //				editing.state = true; // Enable editing mode
-				var $t = editing.blk;
+				var
+					$t = editing.blk,
+					bg = ppbData.grids[pmeRowIndex].style.background_image;
+
+				bg = bg ? 'url(' + bg + ')' : ppbData.grids[pmeRowIndex].style.background;
+
+				$rowBgPreview.css( 'background', bg );
+
+				$rowBg.fadeIn( 500 );
 			},
 			editContent: function () {
 				editing.state = true; // Enable editing mode
@@ -48,8 +58,19 @@ jQuery( function ( $ ) {
 				$t.prop( 'contentEditable', true );
 				$contentToolbars.show( 500 );
 			},
-			styleContent: function () {
+		},
+		rowActions = {
+			bgColor: function() {
+
 			},
+			bgImage: function() {
+
+			},
+			clearImage: function () {
+				$rowBgPreview.add( editing.row ).css( 'background', 'none' );
+
+				ppbData.grids[pmeRowIndex].style.background_image = '';
+			}
 		},
 		contentActions = {
 			createLink: function () {
@@ -62,7 +83,7 @@ jQuery( function ( $ ) {
 				var
 					sel = document.getSelection(),
 					$el = $( sel.anchorNode.parentElement );
-				if ( $el.css( 'display' ) != 'block' ) {
+				if ( $el.css( 'display' ) !== 'block' ) {
 					$el = $el.parentsUntil( '.ppb-block' ).filter( function () {
 						return $( this ).css( "display" ) === "block";
 					} ).first();
@@ -117,6 +138,12 @@ jQuery( function ( $ ) {
 			contentActions[action]( args );
 		} else {
 			document.execCommand( action, false, args ? args : '' );
+		}
+	};
+
+	pmeRow = function ( action ) {
+		if ( typeof rowActions[action] === 'function' ) {
+			rowActions[action]();
 		}
 	};
 
