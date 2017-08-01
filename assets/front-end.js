@@ -64,7 +64,12 @@ jQuery( function ( $ ) {
 
 			},
 			bgImage: function() {
+				ShrameeUnsplashImage(function(url) {
+					$rowBgPreview.add( editing.row ).css( 'background', 'url(' + url + ')' );
 
+					ppbData.grids[pmeRowIndex].style.background_image = url;
+
+				});
 			},
 			clearImage: function () {
 				$rowBgPreview.add( editing.row ).css( 'background', 'none' );

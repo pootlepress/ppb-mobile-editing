@@ -132,6 +132,8 @@ class PPB_Mobile_Editing_Public{
 
 		wp_enqueue_style( $token . '-css', $url . '/assets/front-end.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/front-end.js', array( 'jquery' ) );
+		wp_enqueue_script( 'ppb-unsplash', POOTLEPB_URL . '/js/unsplash.js' );
+
 
 		//Grid data
 		$panels_data = get_post_meta( $post->ID, 'panels_data', true );
