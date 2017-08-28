@@ -1,0 +1,33 @@
+.ppb-tpl {
+	margin: 1em auto;
+	img {
+		border-radius: 0;
+	}
+	h3 {
+		color: #fff;
+		font: 16px/2 sans-serif;
+		background: rgba(0,0,0,0.5);
+		text-align: center;
+		margin: -32px 0 0;
+		position: relative;
+	}
+}
+
+#pme-insert-tpl {
+	overflow: auto;
+	align-items: flex-start;
+	transition: background 0.5s;
+	.preview-actions {
+		display: none;
+	}
+	&.tpl-preview {
+		background: rgba(0,0,0,0.7) center/contain no-repeat;
+		.actions {
+			display: none;
+		}
+
+		.preview-actions {
+			display: flex;
+		}
+	}
+}

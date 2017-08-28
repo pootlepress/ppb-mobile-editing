@@ -7,27 +7,39 @@
  * @property string $path Plugin root dir path
  * @property string $version Plugin version
  */
-class PPB_Mobile_Editing_Public{
+class PPB_Mobile_Editing_Public {
 
 	//region Properties
 
+	/**
+	 * @var  PPB_Mobile_Editing_Public Instance
+	 * @access  private
+	 * @since  1.0.0
+	 */
+	private static $_instance = null;
+	public $tpls = array();
 	/** @var int Number of rows */
 	private $rowCount = 0;
-
-	/** @var int Number of rows */
-	private $contentCount = 0;
-
-	private $nonce;
 	//endregion
 
 	//region Instantiation
+	/** @var int Number of rows */
+	private $contentCount = 0;
+	private $nonce;
 
 	/**
-	 * @var 	PPB_Mobile_Editing_Public Instance
+	 * Constructor function.
 	 * @access  private
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
-	private static $_instance = null;
+	private function __construct() {
+		$this->token   = PPB_Mobile_Editing::$token;
+		$this->url     = PPB_Mobile_Editing::$url;
+		$this->path    = PPB_Mobile_Editing::$path;
+		$this->version = PPB_Mobile_Editing::$version;
+
+		add_action( 'wp', array( $this, 'init' ) );
+	} // End instance()
 
 	/**
 	 * Main PPB Mobile Editing Instance
@@ -39,21 +51,8 @@ class PPB_Mobile_Editing_Public{
 		if ( null == self::$_instance ) {
 			self::$_instance = new self();
 		}
+
 		return self::$_instance;
-	} // End instance()
-
-	/**
-	 * Constructor function.
-	 * @access  private
-	 * @since   1.0.0
-	 */
-	private function __construct() {
-		$this->token   =   PPB_Mobile_Editing::$token;
-		$this->url     =   PPB_Mobile_Editing::$url;
-		$this->path    =   PPB_Mobile_Editing::$path;
-		$this->version =   PPB_Mobile_Editing::$version;
-
-		add_action( 'wp', array( $this, 'init' ) );
 	} // End __construct()
 
 	//endregion
@@ -73,9 +72,9 @@ class PPB_Mobile_Editing_Public{
 				add_action( 'wp_footer', array( $this, 'footer' ) );
 
 				add_filter( 'pootlepb_content_block', array( $this, 'content' ), 5 );
-				add_filter( 'pootlepb_row_style_attributes',		array( $this, 'row_attr' ), 10, 2 );
-				add_filter( 'pootlepb_content_block_attributes',	array( $this, 'content_attr' ), 10, 2 );
-				add_filter( 'pootlepb_after_pb',	array( $this, 'after_pb' ), 10, 2 );
+				add_filter( 'pootlepb_row_style_attributes', array( $this, 'row_attr' ), 10, 2 );
+				add_filter( 'pootlepb_content_block_attributes', array( $this, 'content_attr' ), 10, 2 );
+				add_filter( 'pootlepb_after_pb', array( $this, 'after_pb' ), 10, 2 );
 			} else {
 				echo '<h2>Nonce Validation failed for mobile editing</h2>' . wp_create_nonce( 'ppb-mobile-editing' );
 			}
@@ -84,28 +83,32 @@ class PPB_Mobile_Editing_Public{
 
 	/**
 	 * Adds or modifies the row attributes
+	 *
 	 * @param array $attr Row html attributes
 	 * @param array $settings Row settings
+	 *
 	 * @return array Row html attributes
 	 * @filter pootlepb_row_style_attributes
 	 * @since 1.0.0
 	 */
 	public function row_attr( $attr ) {
-			$attr['data-index'] = $this->rowCount++;
+		$attr['data-index'] = $this->rowCount ++;
 
 		return $attr;
 	}
 
 	/**
 	 * Adds or modifies the row attributes
+	 *
 	 * @param array $attr Row html attributes
 	 * @param array $settings Row settings
+	 *
 	 * @return array Row html attributes
 	 * @filter pootlepb_row_style_attributes
 	 * @since 1.0.0
 	 */
 	public function content_attr( $attr ) {
-		$attr['data-index'] = $this->contentCount++;
+		$attr['data-index'] = $this->contentCount ++;
 
 		return $attr;
 	}
@@ -114,7 +117,7 @@ class PPB_Mobile_Editing_Public{
 	 * @return string
 	 */
 	public function after_pb() {
-		$this->rowCount = 0;
+		$this->rowCount     = 0;
 		$this->contentCount = 0;
 	}
 
@@ -128,12 +131,13 @@ class PPB_Mobile_Editing_Public{
 		global $post;
 
 		$token = $this->token;
-		$url = $this->url;
+		$url   = $this->url;
 
 		wp_enqueue_style( $token . '-css', $url . '/assets/front-end.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/front-end.js', array( 'jquery' ) );
 		wp_enqueue_script( 'ppb-unsplash', POOTLEPB_URL . '/js/unsplash.js' );
 
+		$this->tpls = Pootle_PB_Pootle_Cloud::get_templates();
 
 		//Grid data
 		$panels_data = get_post_meta( $post->ID, 'panels_data', true );
@@ -141,12 +145,13 @@ class PPB_Mobile_Editing_Public{
 
 			wp_localize_script( $token . '-js', 'ppbData', $panels_data );
 
-			wp_localize_script( $token . '-js', 'ppbAjax', array(
-				'url'    => admin_url( 'admin-ajax.php' ),
+			wp_localize_script( $token . '-js', 'pmeData', array(
+				'url'     => admin_url( 'admin-ajax.php' ),
 				'publish' => true,
-				'action' => 'pootlepb_live_editor',
-				'post'   => $post->ID,
-				'nonce'  => $this->nonce,
+				'action'  => 'pootlepb_live_editor',
+				'post'    => $post->ID,
+				'nonce'   => $this->nonce,
+				'tpls'    => $this->tpls,
 			) );
 		}
 	}

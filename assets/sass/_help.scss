@@ -1,4 +1,4 @@
-#pme-help {
+.pme-help {
 	position: fixed;
 	right: 0;
 	bottom: 0;
@@ -17,7 +17,7 @@
 	justify-content: center;
 	z-index: 9999;
 
-	.fa-close {
+	.pme-close {
 		display: none;
 		padding: 0 0 1em 1em;
 	}

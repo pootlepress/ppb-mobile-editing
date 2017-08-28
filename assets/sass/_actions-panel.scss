@@ -1,10 +1,10 @@
 .pme-panel {
-	height: 100vh;
-	width: 200vw;
-	background: rgba(0, 0, 0, 0.7);
+	background: rgba(0,0,0,0.7) center/0 no-repeat;
 	position: fixed;
 	top: 0;
-	left: -50vw;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	z-index: 9999;
 	.actions {
 		display: flex;

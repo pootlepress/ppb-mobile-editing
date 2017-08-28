@@ -1,6 +1,6 @@
-<div onclick="pmeHelp(this)" id="pme-help">
-	<i class="fa fa-question expand"></i>
-	<i class="fa fa-close"></i>
+<div onclick="pmeHelp(this)" class="pme-help">
+	<i class="fa fa-question pme-expand"></i>
+	<i class="fa fa-close pme-close"></i>
 	<p>Double tap page builder rows to edit.</p>
 </div>
 
@@ -18,9 +18,30 @@
 			<i class="fa fa-pencil-square-o"></i>
 			<div>edit content</div>
 		</a>
-		<a href="javascript:pmeAction('styleContent')" class="action">
+		<a href="javascript:pmeAction('insertTemplate')" class="action">
 			<i class="fa fa-plus"></i>
 			<div>insert template</div>
+		</a>
+	</div>
+</div>
+
+<div class="pme-panel flex" id="pme-row" style="display: none;">
+	<div class="actions">
+		<a href="javascript:pmeRow('close')" class="action">
+			<i class="fa fa-close"></i>
+			<div>close</div>
+		</a>
+		<a href="javascript:pmeRow('bgColor')" class="action">
+			<i class="fa fa-paint-brush"></i>
+			<div>background color</div>
+		</a>
+		<a href="javascript:pmeRow('bgImage')" class="action">
+			<i class="fa fa-picture-o"></i>
+			<div>background image</div>
+		</a>
+		<a id="row-background-image-preview" href="javascript:pmeRow('clearImage')" class="action">
+			<i class="fa fa-trash-o "></i>
+			<div>background preview</div>
 		</a>
 	</div>
 </div>
@@ -62,23 +83,41 @@
 	<span></span>
 </div>
 
-<div class="pme-panel flex" id="pme-row" style="display: none;">
-	<div class="actions">
-		<a href="javascript:pmeRow('close')" class="action">
+<div id="pme-insert-tpl" class="pme-panel flex" style="display:none;">
+
+	<div class="preview-actions actions">
+		<a href="javascript:pmeTemplateAction.close()" class="action">
 			<i class="fa fa-close"></i>
 			<div>close</div>
 		</a>
-		<a href="javascript:pmeRow('bgColor')" class="action">
-			<i class="fa fa-paint-brush"></i>
-			<div>background color</div>
-		</a>
-		<a href="javascript:pmeRow('bgImage')" class="action">
-			<i class="fa fa-picture-o"></i>
-			<div>background image</div>
-		</a>
-		<a id="row-background-image-preview" href="javascript:pmeRow('clearImage')" class="action">
-			<i class="fa fa-trash-o "></i>
-			<div>background preview</div>
+		<a href="javascript:pmeTemplateAction.apply()" class="action">
+			<i class="fa fa-check"></i>
+			<div>apply</div>
 		</a>
 	</div>
+
+	<div class="templates actions">
+		<a href="javascript:pmeTemplateAction.close()" class="action">
+			<i class="fa fa-close"></i>
+			<div>close</div>
+		</a>
+		<?php
+		foreach ( $this->tpls as $id => $tpl ) {
+			if ( ! empty( $tpl['img'] ) ) {
+				echo
+					"<div class='ppb-tpl' onclick='pmeTemplateAction(\"$id\")'>" .
+					"<img src='$tpl[img]' alt='$id'>" .
+					"<h3>$id</h3>" .
+					"</div>";
+			}
+		}
+		?>
+	</div>
+
+	<div onclick="pmeHelp(this)" class="pme-help">
+		<i class="fa fa-exclamation pme-expand"></i>
+		<i class="fa fa-close pme-close"></i>
+		<p>Single tap to preview, double tap to quick insert.</p>
+	</div>
+
 </div>
