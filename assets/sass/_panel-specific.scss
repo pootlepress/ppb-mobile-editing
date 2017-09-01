@@ -1,0 +1,72 @@
+// region Template Panel
+
+.ppb-tpl {
+	margin: 1em auto;
+	img {
+		border-radius: 0;
+	}
+	h3 {
+		color: #fff;
+		font: 16px/2 sans-serif;
+		background: rgba(0,0,0,0.5);
+		text-align: center;
+		margin: -32px 0 0;
+		position: relative;
+	}
+}
+
+#pme-insert-tpl {
+	overflow: auto;
+	align-items: flex-start;
+	transition: background 0.5s;
+	.preview-actions {
+		display: none;
+	}
+	&.tpl-preview {
+		background: rgba(0,0,0,0.7) center/contain no-repeat;
+		.actions {
+			display: none;
+		}
+
+		.preview-actions {
+			display: flex;
+		}
+	}
+}
+
+// endregion
+
+// region Row background color
+
+#pme-row-color {
+	.actions {
+		padding: 25px;
+		max-width: 1024px;
+	}
+	span {
+		width: calc( 25% - 16px );
+		margin: 7px;
+		padding: 25px 0;
+		text-align: center;
+		color: #fff;
+		border: 1px solid rgba(255, 255, 255, 0.5);
+		box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.25);
+		text-transform: uppercase;
+		&[style*="#ffffff"], &[style*="#bdc3c7"], &[style*="#ecf0f1"] {
+			color: #555;
+		}
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#pme-row-color span {
+		width: calc( 50% - 16px );
+	}
+}
+
+@media screen and (max-width: 400px) {
+	#pme-row-color span {
+		width: 100%;
+	}
+}
+// endregion

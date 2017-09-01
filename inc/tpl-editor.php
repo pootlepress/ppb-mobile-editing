@@ -25,6 +25,42 @@
 	</div>
 </div>
 
+<div class="pme-panel flex" id="pme-row-color" style="display: none;">
+	<div class="actions">
+		<span onclick="pmeRowColor('#3498db')" style="background:#3498db">Peter river</span>
+		<span onclick="pmeRowColor('#2a84be')" style="background:#2a84be">Belize hole</span>
+
+		<span onclick="pmeRowColor('#34495e')" style="background:#34495e">Wet asphalt</span>
+		<span onclick="pmeRowColor('#2c3e50')" style="background:#2c3e50">Midnight blue</span>
+
+		<span onclick="pmeRowColor('#1abc9c')" style="background:#1abc9c">Turquoise</span>
+		<span onclick="pmeRowColor('#16a085')" style="background:#16a085">Green sea</span>
+		<span onclick="pmeRowColor('#2abb67')" style="background:#2abb67">Nephritis</span>
+		<span onclick="pmeRowColor('#2ecc71')" style="background:#2ecc71">Emerald</span>
+
+		<span onclick="pmeRowColor('#9b59b6')" style="background:#9b59b6">Amethyst</span>
+		<span onclick="pmeRowColor('#8e44ad')" style="background:#8e44ad">Wisteria</span>
+
+		<span onclick="pmeRowColor('#f1c40f')" style="background:#f1c40f">Sun flower</span>
+		<span onclick="pmeRowColor('#f39c12')" style="background:#f39c12">Orange</span>
+		<span onclick="pmeRowColor('#d35400')" style="background:#d35400">Pumpkin</span>
+		<span onclick="pmeRowColor('#e67e22')" style="background:#e67e22">Carrot</span>
+
+		<span onclick="pmeRowColor('#e74c3c')" style="background:#e74c3c">Alizarin</span>
+		<span onclick="pmeRowColor('#c0392b')" style="background:#c0392b">Pomegranate</span>
+
+		<span onclick="pmeRowColor('#ffffff')" style="background:#ffffff">White</span>
+		<span onclick="pmeRowColor('#ecf0f1')" style="background:#ecf0f1">Clouds</span>
+		<span onclick="pmeRowColor('#bdc3c7')" style="background:#bdc3c7">Silver</span>
+		<span onclick="pmeRowColor('#95a5a6')" style="background:#95a5a6">Concrete</span>
+		<span onclick="pmeRowColor('#707677')" style="background:#707677">Asbestos</span>
+		<span onclick="pmeRowColor('#454a4f')" style="background:#454a4f">Grey</span>
+		<span onclick="pmeRowColor('#303539')" style="background:#303539">Dark grey</span>
+		<span onclick="pmeRowColor('#000000')" style="background:#000000">Black</span>
+		<span onclick="pmeRowColor('')" style="background:transparent">No color</span>
+	</div>
+</div>
+
 <div class="pme-panel flex" id="pme-row" style="display: none;">
 	<div class="actions">
 		<a href="javascript:pmeRow('close')" class="action">
@@ -86,7 +122,7 @@
 <div id="pme-insert-tpl" class="pme-panel flex" style="display:none;">
 
 	<div class="preview-actions actions">
-		<a href="javascript:pmeTemplateAction.close()" class="action">
+		<a href="javascript:pmeTemplateAction.back()" class="action">
 			<i class="fa fa-close"></i>
 			<div>close</div>
 		</a>

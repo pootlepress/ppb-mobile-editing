@@ -64,7 +64,7 @@ class PPB_Mobile_Editing_Public {
 	function init() {
 		$nonce = filter_input( INPUT_GET, 'ppb-mobile-editing' );
 
-		if ( $nonce ) {
+		if ( is_user_logged_in() && $nonce ) {
 			if ( wp_verify_nonce( $nonce, 'ppb-mobile-editing' ) ) {
 				$this->nonce = $nonce;
 				show_admin_bar( false );
@@ -145,13 +145,13 @@ class PPB_Mobile_Editing_Public {
 
 			wp_localize_script( $token . '-js', 'ppbData', $panels_data );
 
+			wp_localize_script( $token . '-js', 'pmeTemplates', $this->tpls );
 			wp_localize_script( $token . '-js', 'pmeData', array(
 				'url'     => admin_url( 'admin-ajax.php' ),
 				'publish' => true,
 				'action'  => 'pootlepb_live_editor',
 				'post'    => $post->ID,
-				'nonce'   => $this->nonce,
-				'tpls'    => $this->tpls,
+				'nonce'   => wp_create_nonce( 'ppb-live-edit-nonce' ),
 			) );
 		}
 	}

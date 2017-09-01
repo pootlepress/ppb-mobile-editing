@@ -4,7 +4,7 @@
  * @package PPB_Mobile_Editing
  * @version 1.0.0
  */
-var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeContent, pmeTemplateAction;
+var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeRowColor, pmeContent, pmeTemplateAction;
 
 jQuery( function ( $ ) {
 	var justClicked,
@@ -16,14 +16,17 @@ jQuery( function ( $ ) {
 		$body = $( 'body' ),
 		$acts = $( '#pme-actions' ),
 		$rowBg = $( '#pme-row' ),
+		$rowColor = $( '#pme-row-color' ),
 		$insTpl = $( '#pme-insert-tpl' ),
 		$rowBgPreview = $( '#row-background-image-preview' ),
 		$toolbars = $( '.pme-toolbar' ),
 		$contentToolbars = $toolbars.filter( '#pme-content-format, #pme-content-actions' ),
-		sync = function () {
+		sync = function ( cb ) {
 			return jQuery.post( pmeData.url, pmeData, function ( response ) {
+				if ( typeof cb === 'function' ) {
+					cb( response );
+				}
 				doneEditing();
-				console.log( 'Saved page' );
 			} );
 		},
 		doneEditing = function () {
@@ -38,7 +41,8 @@ jQuery( function ( $ ) {
 			editing.blk = null;
 		},
 		actions = {
-			close: function () {},
+			close: function () {
+			},
 			styleRow: function () {
 //				editing.state = true; // Enable editing mode
 				var
@@ -58,7 +62,7 @@ jQuery( function ( $ ) {
 				$t.prop( 'contentEditable', true );
 				$contentToolbars.show( 500 );
 			},
-			insertTemplate: function() {
+			insertTemplate: function () {
 				$insTpl.fadeIn( 500 );
 			},
 		},
@@ -67,16 +71,18 @@ jQuery( function ( $ ) {
 			close: function () {
 				$rowBg.fadeOut();
 			},
-			bgColor: function() {
-
+			bgColor: function () {
+				$rowBg.fadeOut();
+				$rowColor.fadeIn();
 			},
-			bgImage: function() {
-				ShrameeUnsplashImage(function(url) {
+			bgImage: function () {
+				ShrameeUnsplashImage( function ( url ) {
 					$rowBgPreview.add( editing.row ).css( 'background', 'url(' + url + ')' );
 
 					ppbData.grids[pmeRowIndex].style.background_image = url;
+					ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_image';
 
-				});
+				} );
 			},
 			clearImage: function () {
 				$rowBgPreview.add( editing.row ).css( 'background', 'none' );
@@ -108,8 +114,8 @@ jQuery( function ( $ ) {
 			save: function () {
 				var save = confirm( 'Save all changes?' );
 				if ( save ) {
-					pmeData.data = ppbData;
 					ppbData.widgets[pmeContentIndex].text = editing.blk.html();
+					pmeData.data = ppbData;
 					sync();
 				}
 			},
@@ -140,6 +146,20 @@ jQuery( function ( $ ) {
 		}
 	} );
 
+	//region Action triggers
+
+	pmeRowColor = function ( color ) {
+		ppbData.grids[pmeRowIndex].style.background = color;
+		ppbData.grids[pmeRowIndex].style.bg_overlay_color = color;
+		ppbData.grids[pmeRowIndex].style.bg_overlay_opacity = '0.5';
+		if ( color ) {
+			$rowBgPreview.add( editing.row ).css( 'background', color );
+			ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_color';
+		}
+		$rowBg.fadeIn();
+		$rowColor.fadeOut();
+	};
+
 	pmeAction = function ( action ) {
 		$acts.removeClass( 'active' ).fadeOut();
 		if ( typeof actions[action] === 'function' ) {
@@ -164,6 +184,8 @@ jQuery( function ( $ ) {
 	pmeHelp = function ( that ) {
 		$( that ).toggleClass( 'active' );
 	};
+
+	//endregion
 
 	addTplRow = function ( numCells, blockData, rowStyle ) {
 		var rowID, block, cells, defaultText, i, id, row;
@@ -209,7 +231,7 @@ jQuery( function ( $ ) {
 
 	applyTemplate = function () {
 		var cells, tpl;
-		tpl = pmeData.tpls[ pmeTemplateAction.tpl ];
+		tpl = pmeTemplates[pmeTemplateAction.tpl];
 		cells = 1;
 		if ( tpl.content ) {
 			cells = tpl.content.length;
@@ -220,6 +242,27 @@ jQuery( function ( $ ) {
 			tpl.content,
 			tpl.style ? JSON.parse( tpl.style ) : {}
 		);
+
+		delete pmeData.publish;
+		pmeData.data = ppbData;
+
+		sync( function ( html ) {
+
+			var $html = $( '<div>' + html + '</div>' );
+			$html.find( '.pootle-live-editor' ).each( function () {
+				var $t = $( this );
+				if ( $t.data( 'index' ) ) {
+					$t.closest( '.ppb-row, .ppb-block' )
+						.data( 'index', $t.data( 'index' ) )
+						.attr( 'data-index', $t.data( 'index' ) );
+				}
+				$t.remove();
+			} );
+			$( '#pootle-page-builder' ).html( $html.find( '#pootle-page-builder' ).html() );
+			$( window ).resize();
+
+			pmeData.publish = 1;
+		} );
 
 		// Reset pmeTemplateAction
 		pmeTemplateAction.tpl = '';
@@ -239,7 +282,7 @@ jQuery( function ( $ ) {
 		}
 		pmeTemplateAction.clicked = true;
 		setTimeout(
-			function() {
+			function () {
 				// Single click
 				if ( pmeTemplateAction.clicked ) {
 					pmeTemplateAction.clicked = false;
@@ -249,8 +292,8 @@ jQuery( function ( $ ) {
 		);
 	};
 
-	pmeTemplateAction.preview = function() {
-		tpl = pmeData.tpls[ pmeTemplateAction.tpl ];
+	pmeTemplateAction.preview = function () {
+		tpl = pmeTemplates[pmeTemplateAction.tpl];
 		$insTpl
 			.addClass( 'tpl-preview' )
 			.css( 'background-image', 'url(' + tpl.img + ')' );
@@ -264,10 +307,8 @@ jQuery( function ( $ ) {
 	};
 
 	pmeTemplateAction.close = function () {
-		pmeTemplateAction.tpl = '';
-		$insTpl
-			.removeClass( 'tpl-preview' )
-			.css( 'background-image', '' );
+		pmeTemplateAction.back();
+		$insTpl.fadeOut();
 	};
 	pmeTemplateAction.apply = function () {
 		applyTemplate();

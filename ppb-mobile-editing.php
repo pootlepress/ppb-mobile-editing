@@ -22,7 +22,7 @@ require 'inc/class-public.php';
  * @static string $path Plugin root dir path
  * @static string $version Plugin version
  */
-class PPB_Mobile_Editing{
+class PPB_Mobile_Editing {
 
 	/**
 	 * @var 	PPB_Mobile_Editing Instance
