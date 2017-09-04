@@ -4,6 +4,10 @@
 	<p>Double tap page builder rows to edit.</p>
 </div>
 
+<div onclick="pmePublish()" class="pme-publish">
+	<i class="fa fa-globe"></i>
+</div>
+
 <div class="pme-panel flex" id="pme-actions" style="display: none;">
 	<div class="actions">
 		<a href="javascript:pmeAction('close')" class="action">
@@ -156,4 +160,8 @@
 		<p>Single tap to preview, double tap to quick insert.</p>
 	</div>
 
+</div>
+<div id="loading">
+	<div class="wilson-pootle"></div>
+	<h4>Loading...</h4>
 </div>

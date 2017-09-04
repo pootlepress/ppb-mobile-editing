@@ -4,7 +4,7 @@
  * @package PPB_Mobile_Editing
  * @version 1.0.0
  */
-var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeRowColor, pmeContent, pmeTemplateAction;
+var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeRowColor, pmeContent, pmeTemplateAction, pmePublish;
 
 jQuery( function ( $ ) {
 	var justClicked,
@@ -20,8 +20,10 @@ jQuery( function ( $ ) {
 		$insTpl = $( '#pme-insert-tpl' ),
 		$rowBgPreview = $( '#row-background-image-preview' ),
 		$toolbars = $( '.pme-toolbar' ),
+		$loading = $( '#loading' ),
 		$contentToolbars = $toolbars.filter( '#pme-content-format, #pme-content-actions' ),
 		sync = function ( cb ) {
+			$loading.fadeIn( 250 );
 			return jQuery.post( pmeData.url, pmeData, function ( response ) {
 				if ( typeof cb === 'function' ) {
 					cb( response );
@@ -33,12 +35,16 @@ jQuery( function ( $ ) {
 			$toolbars.hide( 500 );
 			$( '.pme-editing' ).removeClass( 'pme-editing' );
 
-			editing.blk.prop( 'contentEditable', false );
+			if ( editing.blk ) {
+				editing.blk.prop( 'contentEditable', false );
+			}
 
 			// Reset editing object
 			editing.state = false;
 			editing.row = null;
 			editing.blk = null;
+
+			$loading.fadeOut( 250 );
 		},
 		actions = {
 			close: function () {
@@ -183,6 +189,16 @@ jQuery( function ( $ ) {
 
 	pmeHelp = function ( that ) {
 		$( that ).toggleClass( 'active' );
+	};
+
+	pmePublish = function () {
+		if ( confirm( 'Publish all changes?' ) ) {
+			pmeData.publish = 1;
+
+			sync();
+
+			delete pmeData.publish;
+		}
 	};
 
 	//endregion

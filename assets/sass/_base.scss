@@ -4,3 +4,49 @@
 	justify-content: center;
 	flex-wrap: wrap;
 }
+
+#loading {
+	display: none;
+	&, &:before {
+		position: fixed;
+		top: calc(50% - 151px);
+		left: calc(50% - 151px);
+		height: 302px;
+		width: 302px;
+		z-index: 999;
+		text-align: center;
+		background: #ef4832;
+		border-radius: 50%;
+		box-sizing: border-box;
+	}
+	&:before {
+		content: '';
+		background: transparent;
+		border: 10px solid #ef4832;
+		box-shadow: 0 0 0 3px #ef4832;
+		border-top-color: #fff;
+		height: 320px;
+		width: 320px;
+		top: calc( 50% - 160px );
+		left: calc( 50% - 160px );
+		animation: 2s ppb-spin alternate infinite ease-in-out
+	}
+	* {
+		color: #fff;
+		z-index: 9;
+	}
+}
+
+.wilson-pootle {
+	background: (center / contain) no-repeat url("./wnp320.png");
+	width: 160px;
+	height: 169px;
+	position: relative;
+	margin: 50px auto 16px;
+	animation: 2s wnp-run alternate infinite ease-in-out;
+}
+
+@keyframes wnp-run {
+	0% {transform: translateX(-25px);}
+	100% {transform: translateX(25px);}
+}

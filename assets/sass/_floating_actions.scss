@@ -50,3 +50,17 @@
 		}
 	}
 }
+
+.pme-publish {
+	position: fixed;
+	bottom: 2px;
+	left: 2px;
+	background: #ef4832;
+	color: #fff;
+	border-radius: 50%;
+	line-height: 35px;
+	width: 35px;
+	text-align: center;
+	font-size: 1.4em;
+	z-index: 9999;
+}
