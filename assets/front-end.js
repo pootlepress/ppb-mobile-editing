@@ -270,6 +270,12 @@ jQuery( function ( $ ) {
 				}
 				$t.remove();
 			} );
+			$html.find( '[class*="ui-resizable"]' ).remove();
+			$html.find( '.ppb-block' ).each( function() {
+				var $t = $( this );
+				$t.html( '<div class="pme-content">' + $t.find( '.pootle-live-editor-realtime' ).html() + '</div>' );
+			} ) ;
+//			$html.find( '.pootle-live-editor-realtime' ).remove();
 			$( '#pootle-page-builder' ).html( $html.find( '#pootle-page-builder' ).html() );
 			$( window ).resize();
 		} );

@@ -1,7 +1,7 @@
 .ppb-block, .ppb-row {
 	outline: 0 solid rgba( 0,0,0,0.25 );
 	border: 1px solid rgba(0,0,0,0);
-	transition: all 0.5s 0.25s;
+	transition: box-shadow 0.5s 0.25s,  background 0.5s 0.25s;
 }
 
 .pme-editing {
