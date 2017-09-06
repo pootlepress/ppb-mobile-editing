@@ -118,16 +118,13 @@ jQuery( function ( $ ) {
 				}
 			},
 			save: function () {
-				var save = confirm( 'Save all changes?' );
-				if ( save ) {
-					ppbData.widgets[pmeContentIndex].text = editing.blk.html();
-					pmeData.data = ppbData;
-					sync();
-				}
+				ppbData.widgets[pmeContentIndex].text = editing.blk.find( '.pme-content' ).html();
+				pmeData.data = ppbData;
+				doneEditing();
 			},
 			discard: function () {
-				var discard = confirm( 'Are you sure you want to discard all changes?' );
-				if ( discard ) {
+				if ( confirm( 'Really discard content?' ) ) {
+					editing.blk.find( '.pme-content' ).html( ppbData.widgets[pmeContentIndex].text );
 					doneEditing();
 				}
 			},

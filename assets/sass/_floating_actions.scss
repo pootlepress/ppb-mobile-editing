@@ -1,11 +1,10 @@
-.pme-help {
+.pme-publish, .pme-help {
 	position: fixed;
 	right: 0;
 	bottom: 0;
 	background: #ef4832;
 	width: 40px;
-	padding-left: 11px;
-	padding-top: 11px;
+	padding: 7px 0 0 7px;
 	border-radius: 999px 0 0;
 	height: 40px;
 	text-align: center;
@@ -16,6 +15,10 @@
 	align-items: stretch;
 	justify-content: center;
 	z-index: 9999;
+
+	.fa {
+		font-size: 20px;
+	}
 
 	.pme-close {
 		display: none;
@@ -52,15 +55,8 @@
 }
 
 .pme-publish {
-	position: fixed;
-	bottom: 2px;
-	left: 2px;
-	background: #ef4832;
-	color: #fff;
-	border-radius: 50%;
-	line-height: 35px;
-	width: 35px;
-	text-align: center;
-	font-size: 1.4em;
-	z-index: 9999;
+	right: auto;
+	left: 0;
+	border-radius: 0 99px 0 0;
+	padding: 7px 7px 0 0;
 }
