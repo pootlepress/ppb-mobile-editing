@@ -130,6 +130,7 @@ jQuery( function ( $ ) {
 			},
 		};
 
+
 	$body.on( 'click', '.pme-dropdown-toggle', function ( e ) {
 		$( this ).find( '.pme-dropdown' ).slideToggle();
 	} );
@@ -256,11 +257,9 @@ jQuery( function ( $ ) {
 			tpl.style ? JSON.parse( tpl.style ) : {}
 		);
 
-		delete pmeData.publish;
 		pmeData.data = ppbData;
 
 		sync( function ( html ) {
-
 			var $html = $( '<div>' + html + '</div>' );
 			$html.find( '.pootle-live-editor' ).each( function () {
 				var $t = $( this );
@@ -273,8 +272,6 @@ jQuery( function ( $ ) {
 			} );
 			$( '#pootle-page-builder' ).html( $html.find( '#pootle-page-builder' ).html() );
 			$( window ).resize();
-
-			pmeData.publish = 1;
 		} );
 
 		// Reset pmeTemplateAction

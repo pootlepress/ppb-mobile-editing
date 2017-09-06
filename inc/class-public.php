@@ -148,7 +148,6 @@ class PPB_Mobile_Editing_Public {
 			wp_localize_script( $token . '-js', 'pmeTemplates', $this->tpls );
 			wp_localize_script( $token . '-js', 'pmeData', array(
 				'url'     => admin_url( 'admin-ajax.php' ),
-				'publish' => true,
 				'action'  => 'pootlepb_live_editor',
 				'post'    => $post->ID,
 				'nonce'   => wp_create_nonce( 'ppb-live-edit-nonce' ),
