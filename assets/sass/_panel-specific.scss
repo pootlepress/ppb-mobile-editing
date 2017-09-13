@@ -1,3 +1,11 @@
+// region Main actions panel
+
+#pme-actions .actions {
+	max-width: 430px;
+}
+
+// endregion
+
 // region Template Panel
 
 .ppb-tpl {
@@ -38,7 +46,7 @@
 
 // region Row background color
 
-#pme-row-color {
+.pme-color-panel {
 	.actions {
 		padding: 25px;
 		max-width: 1024px;

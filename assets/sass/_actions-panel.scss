@@ -6,6 +6,19 @@
 	right: 0;
 	bottom: 0;
 	z-index: 9999;
+	h2,
+	h3 {
+		color: #fff;
+		font-size: 20px;
+		clear: both;
+		width: 100%;
+		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+	h3 {
+		font-size: 16px;
+	}
 	.actions {
 		display: flex;
 		justify-content: space-around;
@@ -27,7 +40,7 @@
 		text-align: center;
 		width: 100px;
 		height: 100px;
-		margin: 16px 16px 48px;
+		margin: 0 16px 70px;
 		border-radius: 999px;
 		border: 1px solid rgba(255, 255, 255, 0.5);
 		color: #fff;

@@ -17,7 +17,10 @@ class PPB_Mobile_Editing_Public {
 	 * @since  1.0.0
 	 */
 	private static $_instance = null;
+
 	public $tpls = array();
+	public $utpls = array();
+
 	/** @var int Number of rows */
 	private $rowCount = 0;
 	//endregion
@@ -137,7 +140,8 @@ class PPB_Mobile_Editing_Public {
 		wp_enqueue_script( $token . '-js', $url . '/assets/front-end.js', array( 'jquery' ) );
 		wp_enqueue_script( 'ppb-unsplash', POOTLEPB_URL . '/js/unsplash.js' );
 
-		$this->tpls = Pootle_PB_Pootle_Cloud::get_templates();
+		$this->tpls = Pootle_PB_Pootle_Cloud::pp_templates();
+		$this->utpls = Pootle_PB_Pootle_Cloud::user_templates();
 
 		//Grid data
 		$panels_data = get_post_meta( $post->ID, 'panels_data', true );
@@ -146,6 +150,8 @@ class PPB_Mobile_Editing_Public {
 			wp_localize_script( $token . '-js', 'ppbData', $panels_data );
 
 			wp_localize_script( $token . '-js', 'pmeTemplates', $this->tpls );
+			wp_localize_script( $token . '-js', 'pmeUserTemplates', $this->utpls );
+
 			wp_localize_script( $token . '-js', 'pmeData', array(
 				'url'     => admin_url( 'admin-ajax.php' ),
 				'action'  => 'pootlepb_live_editor',

@@ -52,7 +52,7 @@ class PPB_Mobile_Editing_Admin{
 	//region User login workflow
 	public function app_user_status() {
 		setcookie( 'ppb-redirect', filter_input( INPUT_GET, 'redirect' ) );
-		header( 'Location: ' . site_url( '/wp-login.php' ) . '?redirect_to=' . admin_url( 'admin-ajax.php?action=ppb_app_user' ) );
+		header( 'Location: ' . site_url( '/wp-login.php' ) . '?redirect_to=' . urlencode( admin_url( 'admin-ajax.php?action=ppb_app_user' ) ) );
 		exit();
 	}
 
