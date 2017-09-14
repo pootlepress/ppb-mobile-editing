@@ -4,7 +4,8 @@
  * @package PPB_Mobile_Editing
  * @version 1.0.0
  */
-var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeBlock, pmeRowColor, pmeContent, pmeTemplateAction, pmePublish;
+var pmeAction, pmeHelp, pmeRowIndex, pmeContentIndex, pmeRow, pmeBlock, pmeRowColor, pmeContent, pmeTemplateAction,
+	pmePublish;
 
 jQuery( function ( $ ) {
 	var justClicked,
@@ -27,7 +28,7 @@ jQuery( function ( $ ) {
 		$contentToolbars = $toolbars.filter( '#pme-content-format, #pme-content-actions' ),
 		getBlockStyle = function ( i, prop ) {
 			i = i ? i : pmeContentIndex;
-			var blk = ppbData.widgets[ i ];
+			var blk = ppbData.widgets[i];
 			if ( blk && blk.info && blk.info.style ) {
 				var style = JSON.parse( blk.info.style );
 				if ( prop ) {
@@ -51,17 +52,32 @@ jQuery( function ( $ ) {
 			blk.info.style = JSON.stringify( style );
 			ppbData.widgets[i] = blk;
 		},
-		sync = function ( publish ) {
+		sync = function ( publish, loadingTxt ) {
+			var msg = 'Synchronizing...';
+
+			delete pmeData.publish;
+
+			if ( publish ) {
+				if ( publish === 'publish' ) {
+					pmeData.publish = 1;
+					msg = 'Publishing...';
+				} else {
+					msg = publish;
+				}
+			}
+
+			if ( loadingTxt ) {
+				msg = loadingTxt;
+			}
+
+			$loading.find( 'h4' ).html( msg );
 			$loading.fadeIn( 250 );
 
-			if ( publish === 'publish' ) {
-				pmeData.publish = 1;
-			}
 			pmeData.data = ppbData;
 
 			return jQuery.post( pmeData.url, pmeData, function ( response ) {
 
-				if ( ! publish ) {
+				if ( publish !== 'publish' ) {
 					var $html = $( '<div>' + response + '</div>' );
 					$html.find( '.pootle-live-editor[data-index]' ).each( function () {
 						var
@@ -84,7 +100,38 @@ jQuery( function ( $ ) {
 				doneEditing();
 			} );
 		},
-		doneEditing = function () {
+		resort = function() {
+			ppbData.widgets.sort( function ( a, b ) {
+				var ac, ag, ai, bc, bg, bi;
+				if ( ! a.info ) {
+					return 1;
+				}
+				if ( ! b.info ) {
+					return - 1;
+				}
+				ag = parseInt( a.info.grid );
+				ac = parseInt( a.info.cell );
+				ai = parseInt( a.info.id );
+				bg = parseInt( b.info.grid );
+				bc = parseInt( b.info.cell );
+				bi = parseInt( b.info.id );
+				return ag * 10000 + ac * 1000 + ai - (
+					bg * 10000 + bc * 1000 + bi
+				);
+			} );
+			ppbData.grid_cells.sort( function ( a, b ) {
+				var ag, ai, bg, bi;
+				ag = parseInt( a.grid );
+				ai = parseInt( a.id );
+				bg = parseInt( b.grid );
+				bi = parseInt( b.id );
+				return ag * 100 + ai - (
+					bg * 100 + bi
+				);
+			} );
+		},
+		doneEditing = function ( msg ) {
+			msg = msg ? msg : 'Done';
 			$toolbars.hide( 500 );
 			$( '.pme-editing' ).removeClass( 'pme-editing' );
 
@@ -97,7 +144,13 @@ jQuery( function ( $ ) {
 			editing.row = null;
 			editing.blk = null;
 
-			$loading.fadeOut( 250 );
+			$loading.addClass( 'done-loading' );
+			$loading.find( 'h4' ).html( msg );
+			setTimeout( function () {
+				$loading.fadeOut( 250, function () {
+					$loading.removeClass( 'done-loading' );
+				} );
+			}, 700 );
 		},
 		actions = {
 			close: function () {
@@ -108,28 +161,48 @@ jQuery( function ( $ ) {
 
 				$.each( ppbData.widgets, function ( i, v ) {
 					if ( v && v.info ) {
-						if ( rowI == parseInt( v.info.grid ) ) removeBlocks.push( i );
-						else if ( rowI < parseInt( v.info.grid ) ) ppbData.widgets[i].info.grid --;
+						if ( rowI == parseInt( v.info.grid ) ) {
+							removeBlocks.push( i );
+						} else if ( rowI < parseInt( v.info.grid ) ) {
+							ppbData.widgets[i].info.grid --;
+						}
 					}
 				} );
 
 				$.each( ppbData.grid_cells, function ( i, v ) {
 					var gi = ppbData.grid_cells[i].grid;
 					if ( v ) {
-						if ( rowI == gi ) removeCells.push( i );
-						else if ( rowI < gi ) ppbData.grid_cells[i].grid = -- gi;
+						if ( rowI == gi ) {
+							removeCells.push( i );
+						} else if ( rowI < gi ) {
+							ppbData.grid_cells[i].grid = -- gi;
+						}
 					}
 				} );
 
-				removeBlocks.sort( function ( a, b ) { return b - a; } ); // Sort descending
-				$.each( removeBlocks, function ( i, v ) { ppbData.widgets.splice( v, 1 ); } ); // Splice Blocks
+				removeBlocks.sort( function ( a, b ) {
+					return b - a;
+				} ); // Sort descending
+				$.each( removeBlocks, function ( i, v ) {
+					ppbData.widgets.splice( v, 1 );
+				} ); // Splice Blocks
 
-				removeCells.sort( function ( a, b ) { return b - a; } ); // Sort descending
-				$.each( removeCells, function ( i, v ) { ppbData.grid_cells.splice( v, 1 ) } ); // Splice Cells
+				removeCells.sort( function ( a, b ) {
+					return b - a;
+				} ); // Sort descending
+				$.each( removeCells, function ( i, v ) {
+					ppbData.grid_cells.splice( v, 1 )
+				} ); // Splice Cells
 
-				ppbData.grids.filter( function () { return true; } );
-				ppbData.widgets.filter( function () { return true; } );
-				ppbData.grid_cells.filter( function () { return true; } );
+				ppbData.grids.filter( function () {
+					return true;
+				} );
+				ppbData.widgets.filter( function () {
+					return true;
+				} );
+				ppbData.grid_cells.filter( function () {
+					return true;
+				} );
 
 				editing.row.remove();
 				sync();
@@ -148,7 +221,7 @@ jQuery( function ( $ ) {
 				if ( blk && blk.info && blk.info.style ) {
 					var
 						style = JSON.parse( blk.info.style ),
-					bg = style['background-image'];
+						bg = style['background-image'];
 
 					bg = bg ? 'url(' + bg + ')' : style['background-color'];
 
@@ -168,41 +241,84 @@ jQuery( function ( $ ) {
 				$insTpl.fadeIn( 500 );
 			},
 		},
-
-		rowActions = {
-			close: function () {
-				$rowBg.fadeOut();
-			},
-			setColor: function ( color ) {
-				ppbData.grids[pmeRowIndex].style.background = color;
-				ppbData.grids[pmeRowIndex].style.bg_overlay_color = color;
-				ppbData.grids[pmeRowIndex].style.bg_overlay_opacity = '0.5';
-				if ( color ) {
-					$rowBgPreview.add( editing.row ).css( 'background', color );
-					ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_color';
-				}
-				$rowBg.fadeIn();
-				$rowColor.fadeOut();
-			},
-			bgColor: function () {
-				$rowBg.fadeOut();
-				$rowColor.fadeIn();
-			},
-			bgImage: function () {
-				ShrameeUnsplashImage( function ( url ) {
-					$rowBgPreview.add( editing.row ).css( 'background-image', 'url(' + url + ')' );
-
-					ppbData.grids[pmeRowIndex].style.background_image = url;
-					ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_image';
-
-				} );
-			},
-			clearImage: function () {
-				$rowBgPreview.add( editing.row ).css( 'background', 'none' );
-
-				ppbData.grids[pmeRowIndex].style.background_image = '';
+		moveRow = function ( oldI, newI ) {
+			if ( newI == oldI ) {
+				return;
 			}
+
+			var
+				range = [oldI, newI],
+				diff = newI < oldI ? 1 : - 1;
+
+			ppbData.grids.splice( newI, 0, ppbData.grids.splice( oldI, 1 )[0] )
+
+			range = range.sort( function ( a, b ) {
+				return a - b;
+			} );
+
+			$.each( ppbData.widgets, function ( i, v ) {
+				var gi;
+				if ( v && v.info ) {
+					gi = parseInt( v.info.grid );
+					if ( range[0] <= gi && range[1] >= gi ) {
+						if ( gi == oldI ) {
+							ppbData.widgets[i].info.grid = newI;
+						} else {
+							ppbData.widgets[i].info.grid = gi + diff;
+						}
+					}
+				}
+			} );
+			$.each( ppbData.grid_cells, function ( i, v ) {
+				var gi;
+				if ( v ) {
+					gi = parseInt( v.grid );
+					ppbData.grid_cells[i].old_grid = gi;
+					if ( range[0] <= gi && range[1] >= gi ) {
+						if ( gi == oldI ) {
+							ppbData.grid_cells[i].grid = newI;
+						} else {
+							ppbData.grid_cells[i].grid = gi + diff;
+						}
+					}
+				}
+			} );
+			resort();
+		};
+	rowActions = {
+		close: function () {
+			$rowBg.fadeOut();
 		},
+		setColor: function ( color ) {
+			ppbData.grids[pmeRowIndex].style.background = color;
+			ppbData.grids[pmeRowIndex].style.bg_overlay_color = color;
+			ppbData.grids[pmeRowIndex].style.bg_overlay_opacity = '0.5';
+			if ( color ) {
+				$rowBgPreview.add( editing.row ).css( 'background', color );
+				ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_color';
+			}
+			$rowBg.fadeIn();
+			$rowColor.fadeOut();
+		},
+		bgColor: function () {
+			$rowBg.fadeOut();
+			$rowColor.fadeIn();
+		},
+		bgImage: function () {
+			ShrameeUnsplashImage( function ( url ) {
+				$rowBgPreview.add( editing.row ).css( 'background-image', 'url(' + url + ')' );
+
+				ppbData.grids[pmeRowIndex].style.background_image = url;
+				ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_image';
+
+			} );
+		},
+		clearImage: function () {
+			$rowBgPreview.add( editing.row ).css( 'background', 'none' );
+
+			ppbData.grids[pmeRowIndex].style.background_image = '';
+		}
+	},
 
 		blockActions = {
 			close: function () {
@@ -376,7 +492,7 @@ jQuery( function ( $ ) {
 		}
 	};
 
-	applyTemplate = function () {
+	applyTemplate = function ( index ) {
 		var cells, tpl;
 		tpl = pmeTemplates[pmeTemplateAction.tpl];
 		cells = 1;
@@ -390,9 +506,13 @@ jQuery( function ( $ ) {
 			tpl.style ? JSON.parse( tpl.style ) : {}
 		);
 
+		if ( index ) {
+			moveRow( ppbData.grids.length - 1, index );
+		}
+
 		pmeData.data = ppbData;
 
-		sync(  );
+		sync( 'Adding content...' );
 
 		// Reset pmeTemplateAction
 		pmeTemplateAction.tpl = '';
@@ -408,7 +528,7 @@ jQuery( function ( $ ) {
 		if ( pmeTemplateAction.clicked ) {
 			// Second click under 500ms
 			pmeTemplateAction.clicked = false;
-			applyTemplate();
+			pmeTemplateAction.apply();
 		}
 		pmeTemplateAction.clicked = true;
 		setTimeout(
@@ -441,6 +561,6 @@ jQuery( function ( $ ) {
 		$insTpl.fadeOut();
 	};
 	pmeTemplateAction.apply = function () {
-		applyTemplate();
+		applyTemplate( pmeRowIndex + 1 );
 	};
 } );
