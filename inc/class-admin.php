@@ -63,7 +63,9 @@ class PPB_Mobile_Editing_Admin{
 			$redirect = $_COOKIE['ppb-redirect'];
 		}
 
-		header( "Location: $redirect?nonce=$nonce" );
+		$redirect = str_replace( '#logged-in', "?nonce=$nonce#logged-in", $redirect );
+
+		header( "Location: $redirect" );
 	}
 	//endregion
 
