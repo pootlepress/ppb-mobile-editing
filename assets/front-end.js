@@ -59,7 +59,7 @@ jQuery( function ( $ ) {
 
 			if ( publish ) {
 				if ( publish === 'publish' ) {
-					pmeData.publish = 1;
+					pmeData.publish = 'Publish';
 					msg = 'Publishing...';
 				} else {
 					msg = publish;
@@ -84,8 +84,8 @@ jQuery( function ( $ ) {
 							$t = $( this ),
 							i = $t.data( 'index' );
 						$t.closest( '.ppb-row, .ppb-block' ).attr( 'data-index', $t.data( 'index' ) );
-						$t.remove();
 					} );
+					$html.find( '.pootle-live-editor' ).remove();
 					$html.find( '[class*="ui-resizable"]' ).remove();
 					$html.find( '.ppb-block' ).each( function () {
 						var $t = $( this );
@@ -284,41 +284,41 @@ jQuery( function ( $ ) {
 				}
 			} );
 			resort();
-		};
-	rowActions = {
-		close: function () {
-			$rowBg.fadeOut();
 		},
-		setColor: function ( color ) {
-			ppbData.grids[pmeRowIndex].style.background = color;
-			ppbData.grids[pmeRowIndex].style.bg_overlay_color = color;
-			ppbData.grids[pmeRowIndex].style.bg_overlay_opacity = '0.5';
-			if ( color ) {
-				$rowBgPreview.add( editing.row ).css( 'background', color );
-				ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_color';
+		rowActions = {
+			close: function () {
+				$rowBg.fadeOut();
+			},
+			setColor: function ( color ) {
+				ppbData.grids[pmeRowIndex].style.background = color;
+				ppbData.grids[pmeRowIndex].style.bg_overlay_color = color;
+				ppbData.grids[pmeRowIndex].style.bg_overlay_opacity = '0.5';
+				if ( color ) {
+					$rowBgPreview.add( editing.row ).css( 'background', color );
+					ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_color';
+				}
+				$rowBg.fadeIn();
+				$rowColor.fadeOut();
+			},
+			bgColor: function () {
+				$rowBg.fadeOut();
+				$rowColor.fadeIn();
+			},
+			bgImage: function () {
+				ShrameeUnsplashImage( function ( url ) {
+					$rowBgPreview.add( editing.row ).css( 'background-image', 'url(' + url + ')' );
+
+					ppbData.grids[pmeRowIndex].style.background_image = url;
+					ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_image';
+
+				} );
+			},
+			clearImage: function () {
+				$rowBgPreview.add( editing.row ).css( 'background', 'none' );
+
+				ppbData.grids[pmeRowIndex].style.background_image = '';
 			}
-			$rowBg.fadeIn();
-			$rowColor.fadeOut();
 		},
-		bgColor: function () {
-			$rowBg.fadeOut();
-			$rowColor.fadeIn();
-		},
-		bgImage: function () {
-			ShrameeUnsplashImage( function ( url ) {
-				$rowBgPreview.add( editing.row ).css( 'background-image', 'url(' + url + ')' );
-
-				ppbData.grids[pmeRowIndex].style.background_image = url;
-				ppbData.grids[pmeRowIndex].style.background_toggle = '.bg_image';
-
-			} );
-		},
-		clearImage: function () {
-			$rowBgPreview.add( editing.row ).css( 'background', 'none' );
-
-			ppbData.grids[pmeRowIndex].style.background_image = '';
-		}
-	},
 
 		blockActions = {
 			close: function () {
@@ -342,9 +342,9 @@ jQuery( function ( $ ) {
 				} );
 			},
 			clearImage: function () {
-				$blockBgPreview.add( editing.row ).css( 'background', 'none' );
+				$blockBgPreview.add( editing.blk ).css( 'background', 'none' );
 
-				ppbData.grids[pmeRowIndex].style.background_image = '';
+				setBlockStyle( pmeContentIndex, 'background-image', '' );
 			}
 		},
 
