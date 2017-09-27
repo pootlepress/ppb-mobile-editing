@@ -66,6 +66,7 @@ class PPB_Mobile_Editing_Admin{
 		$redirect = str_replace( '#logged-in', "?nonce=$nonce#logged-in", $redirect );
 
 		header( "Location: $redirect" );
+		die();
 	}
 	//endregion
 
