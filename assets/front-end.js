@@ -88,8 +88,9 @@ jQuery( function ( $ ) {
 					$html.find( '.pootle-live-editor' ).remove();
 					$html.find( '[class*="ui-resizable"]' ).remove();
 					$html.find( '.ppb-block' ).each( function () {
-						var $t = $( this );
-						$t.html( '<div class="pme-content">' + $t.find( '.pootle-live-editor-realtime' ).html() + '</div>' );
+						$( this )
+							.find( '.pootle-live-editor-realtime' )
+							.addClass( 'pme-content' ).removeClass( 'pootle-live-editor-realtime' );
 					} );
 
 					$( '#pootle-page-builder' ).html( $html.find( '#pootle-page-builder' ).html() );
@@ -400,6 +401,12 @@ jQuery( function ( $ ) {
 			}, 500 );
 		}
 	} );
+
+	var tpl;
+	for ( var i = 0; i < pmeUserTemplates.length; i ++ ) {
+		tpl = pmeUserTemplates[i];
+		pmeTemplates['utpl-' + tpl['name']] = tpl;
+	}
 
 	//region Action triggers
 
