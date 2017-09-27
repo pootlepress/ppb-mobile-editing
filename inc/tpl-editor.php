@@ -212,14 +212,15 @@
 		<?php
 		if ($this->utpls ) {
 			echo '<h2>Your templates</h2>';
-			foreach ( $this->utpls as $id => $tpl ) {
-				if ( ! empty( $tpl['img'] ) ) {
-					echo
-						"<div class='ppb-tpl' onclick='pmeUserTemplateAction(\"$id\")'>" .
-						"<img src='$tpl[img]' alt='$id'>" .
-						"<h3>$id</h3>" .
-						"</div>";
+			foreach ( $this->utpls as $tpl ) {
+				if ( empty( $tpl['img'] ) ) {
+					$tpl['img'] = 'https://pootle-cloud.firebaseapp.com/assets/default-wilson.jpg';
 				}
+				echo
+					"<div class='ppb-tpl' onclick='pmeTemplateAction(\"utpl-$tpl[name]\")'>" .
+					"<img src='$tpl[img]' alt='$tpl[name]'>" .
+					"<h3>$tpl[name]</h3>" .
+					"</div>";
 			}
 			echo '<h2>Pootle templates</h2>';
 		}
