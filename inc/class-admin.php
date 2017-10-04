@@ -44,14 +44,19 @@ class PPB_Mobile_Editing_Admin{
 	} // End __construct()
 
 	private function hooks() {
+
 		add_action( 'wp_ajax_nopriv_ppb_app_user', array( $this, 'app_user_status' ) );
 		add_action( 'wp_ajax_ppb_app_user', array( $this, 'app_user_logged_in' ) );
+
+		add_action( 'wp_ajax_nopriv_ppb_app_ping', array( $this, 'ping_handler' ) );
+		add_action( 'wp_ajax_ppb_app_ping', array( $this, 'ping_handler' ) );
+
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
 	//region User login workflow
 	public function app_user_status() {
-		setcookie( 'ppb-redirect', filter_input( INPUT_GET, 'redirect' ) );
+		setcookie( 'ppb-redirect', filter_input( INPUT_GET, 'redirect' ), '', site_url( '/' ) );
 		header( 'Location: ' . site_url( '/wp-login.php' ) . '?redirect_to=' . urlencode( admin_url( 'admin-ajax.php?action=ppb_app_user' ) ) );
 		exit();
 	}
@@ -69,6 +74,19 @@ class PPB_Mobile_Editing_Admin{
 		die();
 	}
 	//endregion
+
+	public function ping_handler() {
+		header('Access-Control-Allow-Origin: *');
+		die(
+			json_encode(
+				array(
+					'site'           => site_url(),
+					'page_builder'   => POOTLEPB_VERSION,
+					'mobile-editing' => $this->version,
+				)
+			)
+		);
+	}
 
 	//region REST API routes
 
